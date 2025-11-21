@@ -13,7 +13,7 @@ export const sendEmail = async (to, subject, html) => {
       html,
     });
 
-    logger.info(`Email sent to ${to}`, { messageId: result.id });
+    logger.info(`Email sent to ${to}`,);
     return result;
     
   } catch (error) {
