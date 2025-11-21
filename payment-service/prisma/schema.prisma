@@ -7,6 +7,27 @@
 
 
 
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "postgresql"
+// }
+
+// model Payment {
+//   id        String   @id @default(cuid())
+//   userId    String   // reference to auth-service user
+//   amount    Float
+//   status    String   @default("PENDING") // PENDING, COMPLETED, FAILED
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   @@index([userId])
+// }
+
+
+// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
@@ -17,9 +38,9 @@ datasource db {
 
 model Payment {
   id        String   @id @default(cuid())
-  userId    String   // reference to auth-service user
+  userId    String
   amount    Float
-  status    String   @default("PENDING") // PENDING, COMPLETED, FAILED
+  status    String   @default("PENDING")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-import { prisma } from "../utils/prisma.js";
+import prisma from "../utils/prisma.js";
 import BankingSystem from "../utils/bankingSystem.js";
 
 // POST /payments

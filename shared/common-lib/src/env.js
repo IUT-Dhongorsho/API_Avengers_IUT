@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
-    DB_URL: z.string().url(),   
+    DATABASE_URL: z.string().url(),   
     REDIS_URL: z.string().url(),
     KAFKA_BROKERS: z.string(),
     KAFKA_CLIENT_ID: z.string(),
