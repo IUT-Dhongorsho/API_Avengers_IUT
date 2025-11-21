@@ -1,0 +1,6 @@
+.campaigns-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:12px; margin-top:12px; }
+.campaign-card { background:var(--card); padding:12px; border-radius:8px; box-shadow:0 1px 3px rgba(10,20,30,0.05); }
+.campaigns-admin { display:flex; gap:12px; flex-wrap:wrap; }
+.campaign-admin-card { border:1px solid #eee; padding:12px; border-radius:8px; min-width:200px; background:#fff; }
+.pledges-table { width:100%; border-collapse:collapse; margin-top:8px; }
+.pledges-table th, .pledges-table td { border:1px solid #f1f5f9; padding:8px; text-align:left; }
