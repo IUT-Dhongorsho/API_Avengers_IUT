@@ -1,45 +1,42 @@
 import { prisma } from "./prisma.js";
 
-export class BankingSystem {
+class BankingSystem {
   constructor() {
-    this.queue = Promise.resolve(); // Ensures sequential processing
+    this.queue = Promise.resolve(); // ensures sequential transaction processing
   }
 
-  async createPayment(userId, amount) {
-    if (amount <= 0) {
-      throw new Error("Amount must be positive");
-    }
-
-    // Queue payment requests
-    this.queue = this.queue.then(() => this._processPayment(userId, amount));
-    return this.queue;
-  }
-
-  async _processPayment(userId, amount) {
-    try {
+  async processTransaction(paymentServiceClient, payment) {
+    // Queue transactions to prevent race conditions
+    this.queue = this.queue.then(async () => {
+      // Start atomic transaction
+      const prisma = paymentServiceClient; // pass in Prisma client
       return await prisma.$transaction(async (tx) => {
-        // Fetch user to ensure they exist
-        const user = await tx.user.findUnique({ where: { id: userId } });
-        if (!user) throw new Error("User not found");
+        // Check amount validity
+        if (payment.amount <= 0) {
+          throw new Error("❌ Invalid transaction amount.");
+        }
 
-        // Simulate balance check (for future extensions)
-        // const balance = user.balance;
-        // if (balance < amount) throw new Error("Insufficient funds");
-
-        // Create payment
-        const payment = await tx.payment.create({
+        // Insert Payment
+        const newPayment = await tx.payment.create({
           data: {
-            userId,
-            amount,
-            status: "COMPLETED",
+            userId: payment.userId,
+            amount: payment.amount,
+            status: "PENDING",
           },
         });
 
-        return payment;
+        // Simulate actual banking process
+        // (In real system, call external API here)
+        newPayment.status = "COMPLETED";
+        return await tx.payment.update({
+          where: { id: newPayment.id },
+          data: { status: newPayment.status },
+        });
       });
-    } catch (err) {
-      console.error("Payment processing error:", err.message);
-      throw err;
-    }
+    });
+
+    return this.queue;
   }
 }
+
+export default new BankingSystem();
