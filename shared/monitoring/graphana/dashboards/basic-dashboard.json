@@ -1,0 +1,32 @@
+{
+    "id": null,
+    "uid": "basic-monitoring",
+    "title": "Basic Services Overview",
+    "panels": [
+      {
+        "type": "graph",
+        "title": "http_requests_total (example)",
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total[1m])) by (service)",
+            "legendFormat": "{{service}}"
+          }
+        ],
+        "gridPos": {"x":0,"y":0,"w":24,"h":9}
+      },
+      {
+        "type": "graph",
+        "title": "pledges_created_total (example)",
+        "targets": [
+          {
+            "expr": "sum(rate(pledges_created_total[1m])) by (service)",
+            "legendFormat": "{{service}}"
+          }
+        ],
+        "gridPos": {"x":0,"y":9,"w":24,"h":9}
+      }
+    ],
+    "schemaVersion": 16,
+    "version": 0
+  }
+  
