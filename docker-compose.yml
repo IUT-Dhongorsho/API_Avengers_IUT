@@ -1,0 +1,77 @@
+# monitoring & infra snippet
+zookeeper:
+  image: confluentinc/cp-zookeeper:7.4.0
+  environment:
+    ZOOKEEPER_CLIENT_PORT: 2181
+  ports: ["2181:2181"]
+
+kafka:
+  image: confluentinc/cp-kafka:7.4.0
+  depends_on: [zookeeper]
+  environment:
+    KAFKA_BROKER_ID: 1
+    KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+    KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+    KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+    KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    KAFKA_NUM_PARTITIONS: 6
+  ports: ["9092:9092"]
+
+postgres:
+  image: postgres:15
+  environment:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    POSTGRES_DB: careforall
+  ports: ["5432:5432"]
+  volumes:
+    - pgdata:/var/lib/postgresql/data
+
+redis:
+  image: redis:7
+  ports: ["6379:6379"]
+
+otel-collector:
+  image: otel/opentelemetry-collector-contrib:0.64.0
+  command: ["--config=/etc/otel-collector-config.yaml"]
+  volumes:
+    - ./shared/monitoring/otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+  ports: ["4317:4317","4318:4318","9464:9464"]
+
+jaeger:
+  image: jaegertracing/all-in-one:1.41
+  ports: ["16686:16686","14268:14268"]
+
+prometheus:
+  image: prom/prometheus:v2.47.0
+  volumes:
+    - ./shared/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+  ports: ["9090:9090"]
+
+grafana:
+  image: grafana/grafana:9.4
+  depends_on:
+    - prometheus
+  environment:
+    - GF_SECURITY_ADMIN_PASSWORD=admin
+  volumes:
+    - ./shared/monitoring/grafana/provisioning:/etc/grafana/provisioning
+    - ./shared/monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+  ports: ["3000:3000"]
+
+node-exporter:
+  image: prom/node-exporter:latest
+  ports: ["9100:9100"]
+
+cadvisor:
+  image: gcr.io/cadvisor/cadvisor:latest
+  ports: ["8080:8080"]
+
+kafka-exporter:
+  image: danielqsj/kafka-exporter:1.3.2
+  environment:
+    - KAFKA_BROKER=kafka:9092
+  ports: ["9308:9308"]
+
+volumes:
+  pgdata:
