@@ -1,0 +1,4 @@
+.site-header { position:fixed; top:0; left:0; right:0; background:#08315a; color:#fff; z-index:40; height:56px; display:flex; align-items:center; }
+.header-inner { width:100%; max-width:1100px; margin:0 auto; padding:0 16px; display:flex; align-items:center; justify-content:space-between; }
+.logo { color:#fff; text-decoration:none; font-weight:700; font-size:20px; }
+.site-header nav a, .site-header nav .btn-link { color:#dbeeff; margin-left:14px; text-decoration:none; }

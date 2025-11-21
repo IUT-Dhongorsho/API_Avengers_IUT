@@ -3,8 +3,8 @@ import {
   registerUser,
   loginUser,
   logoutUser,
-  refreshToken,
-} from "../controllers/auth.controller.js";
+} from "../controllers/controller.js";
+// import protect from "../../../shared/common-lib/src/middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -17,7 +17,7 @@ router.post("/login", loginUser);
 // POST /auth/logout
 router.post("/logout", logoutUser);
 
-// GET /auth/refresh
-router.get("/refresh", refreshToken);
+// // GET /auth/refresh
+// router.get("/refresh", protect, refreshToken);
 
 export default router;
